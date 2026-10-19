@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-mode="skim">
+<head>
+<script>try{var m=localStorage.getItem("t5-mode");if(m==="skim"||m==="detail")document.documentElement.setAttribute("data-mode",m);}catch(e){}</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samyukth Bitra — Marketing, The5ers India</title>
+<style>
+/* Style, background and scripts come from the Shades of Trades audit (Shades-Of-Trades-Audit-main);
+   the palette is The5ers' own (navy #1c1c42, lime #ddfd6c, purple #8458fc, cream #f4f3e5). Research: @the5ersindia, read 19 Oct 2026. */
+:root{
+  color-scheme: light;
+  --surface-1:rgba(255,255,255,.72); --base:#f4f3e5;
+  --glass:blur(12px) saturate(120%);
+  --ink-1:#100f0f; --ink-2:#4d4c55; --ink-3:#86858c;
+  --grid:rgba(16,15,15,.10); --axis:rgba(16,15,15,.20); --ring:rgba(16,15,15,0.12);
+  --s1:#4f6a00; --s2:#6a45e0; --s3:#c95e00; --crit:#b9473d;
+  --wash:rgba(106,69,224,0.07);
+  --radius:14px;
+  --font:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-1:rgba(255,255,255,.05); --base:#0c0c16;
+  --ink-1:#f4f3e5; --ink-2:#c4c3cf; --ink-3:#8a8996;
+  --grid:rgba(255,255,255,.08); --axis:rgba(255,255,255,.16); --ring:rgba(255,255,255,0.12);
+  --s1:#d6ef7a; --s2:#a48cff; --s3:#ff9a4d; --crit:#ef8f7a;
+  --wash:rgba(164,140,255,0.10);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; background:var(--base);}
+body{
+  margin:0; background:transparent; color:var(--ink-1);
+  font-family:var(--font); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--s1);}
+h1,h2,h3,h4{line-height:1.25; margin:0; font-weight:650; letter-spacing:-0.015em;}
+h1{font-size:clamp(28px,4.4vw,44px); letter-spacing:-0.03em;}
+h2{font-size:clamp(21px,2.6vw,28px); letter-spacing:-0.02em;}
+h3{font-size:18px;}
+p{margin:0 0 14px;}
+.wrap{max-width:1080px; margin:0 auto; padding:0 22px;}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:100; background:color-mix(in srgb, var(--base) 96%, transparent);
+  backdrop-filter:blur(20px) saturate(140%); -webkit-backdrop-filter:blur(20px) saturate(140%);
+  border-bottom:1px solid var(--ring); transition:box-shadow .3s;
+}
+.topbar.stuck{ box-shadow:0 10px 30px rgba(0,0,0,.28); }
+:root[data-theme="light"] .topbar.stuck{ box-shadow:0 8px 26px rgba(11,11,11,.10); }
+.topbar-in{display:flex; align-items:center; gap:18px; height:58px;}
+.brand{font-weight:680; font-size:14.5px; letter-spacing:-0.01em; white-space:nowrap;}
+.brand span{color:var(--ink-3); font-weight:500;}
+.navlinks{display:flex; gap:4px; margin-left:auto; overflow-x:auto; scrollbar-width:none;}
+.navlinks::-webkit-scrollbar{display:none;}
+.navlinks a{
+  position:relative; font-size:13px; color:var(--ink-2); text-decoration:none; padding:6px 10px;
+  border-radius:8px; white-space:nowrap; transition:color .2s ease, background .2s ease;
+}
+.navlinks a::after{
+  content:''; position:absolute; left:10px; right:10px; bottom:3px; height:2px; border-radius:2px;
+  background:var(--s1); transform:scaleX(0); transition:transform .28s cubic-bezier(.3,.8,.3,1);
+}
+@media (hover:hover){
+  .navlinks a:hover{ color:var(--ink-1); background:var(--wash); }
+  .navlinks a:hover::after{ transform:scaleX(.55); }
+}
+.navlinks a.active{ color:var(--ink-1); background:var(--wash); font-weight:600; }
+.navlinks a.active::after{ transform:scaleX(1); }
+.iconbtn{
+  border:1px solid var(--ring); background:var(--surface-1); color:var(--ink-2);
+  width:34px; height:34px; border-radius:9px; cursor:pointer; font-size:15px;
+  display:grid; place-items:center; flex:none;
+}
+.iconbtn:hover{color:var(--ink-1); border-color:var(--axis);}
+.topbar .progress{
+  position:absolute; left:0; bottom:-1px; height:2px; width:0%;
+  background:linear-gradient(90deg, var(--s1), var(--s3)); transition:width .12s linear;
+}
+
+/* ---------- full-page Scanner field (vanilla WebGL2 port of React Bits <Scanner />) ---------- */
+.scanner-band{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+.scanner-container{ position:absolute; inset:0; width:100%; height:100%; overflow:hidden; }
+.scanner-container canvas{ display:block; width:100%; height:100%; }
+.scanner-scrim{
+  position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(120% 70% at 50% 0%, rgba(12,12,22,.40) 0%, rgba(12,12,22,.72) 55%, rgba(12,12,22,.84) 100%);
+}
+:root[data-theme="light"] .scanner-scrim{
+  background:radial-gradient(120% 70% at 50% 0%, rgba(244,243,229,.66) 0%, rgba(244,243,229,.82) 55%, rgba(244,243,229,.88) 100%);
+}
+.herowrap, .wrap, footer{ position:relative; z-index:1; }
+
+/* ---------- hero ---------- */
+.hero{padding:64px 0 8px;}
+.eyebrow{
+  font-size:12px; letter-spacing:.10em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:620; margin-bottom:14px;
+}
+.lede{font-size:18.5px; color:var(--ink-2); max-width:66ch; margin-top:16px;}
+.lede strong{color:var(--ink-1);}
+.meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:20px;}
+.chip{
+  font-size:12.5px; padding:4px 11px; border-radius:999px;
+  border:1px solid var(--ring); color:var(--ink-2); background:var(--surface-1);
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+}
+.chip.verified{color:var(--s1); border-color:color-mix(in srgb,var(--s1) 35%,transparent);}
+
+/* ---------- callout ---------- */
+.callout{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-left:3px solid var(--s3);
+  border-radius:var(--radius); padding:18px 20px; margin:22px 0 0; font-size:14.5px; color:var(--ink-2);
+}
+.callout strong{color:var(--ink-1);}
+.callout .ct{font-size:13px; font-weight:650; color:var(--ink-1); margin-bottom:6px;}
+.callout.good{border-left-color:var(--s1);}
+
+/* ---------- sections ---------- */
+section{padding:60px 0 22px; margin-top:28px; scroll-margin-top:66px; position:relative;}
+/* section divider: a full-width rule with a short accent segment where the section number starts */
+section::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:1px; background:var(--axis);
+}
+section::after{
+  content:''; position:absolute; top:-1px; left:0; width:72px; height:3px; border-radius:2px; background:var(--s1);
+}
+/* lighter rule between the research parts (2.1 summary, 2.2 changes, 2.3 full research) */
+#research > .sub{padding-top:30px; border-top:1px dashed var(--axis);}
+.sec-head{margin-bottom:26px;}
+.sec-head .num{
+  position:relative; font-size:12px; font-weight:680; color:var(--ink-3); letter-spacing:.08em; display:block; margin-bottom:8px;
+}
+.sec-head .num::before{
+  content:''; position:absolute; left:-14px; top:50%; width:6px; height:6px; margin-top:-3px;
+  border-radius:50%; background:var(--s1); opacity:.55;
+}
+.sec-head p{color:var(--ink-2); max-width:64ch; margin-top:10px; font-size:15px;}
+.sub{margin:44px 0 14px;}
+.sub .k{font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); font-weight:650; display:block; margin-bottom:6px;}
+.sub p{color:var(--ink-2); max-width:66ch; margin:8px 0 0; font-size:14.5px;}
+
+/* ---------- stat tiles ---------- */
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(178px,1fr)); gap:12px;}
+.tile{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-radius:var(--radius);
+  padding:17px 18px;
+}
+.tile .k{font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-3); font-weight:620;}
+.tile .v{font-size:31px; font-weight:660; letter-spacing:-0.03em; margin:7px 0 3px; line-height:1;}
+.tile .v.ok{color:var(--s1);}
+.tile .d{font-size:12.5px; color:var(--ink-2);}
+
+/* ---------- cards ---------- */
+.card{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-radius:var(--radius);
+  padding:22px; min-width:0;
+}
+.card-title{font-size:16px; font-weight:640;}
+.card-sub{font-size:13px; color:var(--ink-2); margin-top:3px; max-width:64ch;}
+.two{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:12px;}
+.card h4{font-size:12px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-3); margin:0 0 12px;}
+ul.tight{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px; color:var(--ink-2); font-size:14.5px;}
+ul.tight li{display:grid; grid-template-columns:16px 1fr; gap:8px;}
+ul.tight li::before{content:'◆'; color:var(--s1); font-size:10px; margin-top:6px;}
+ul.tight.x li::before{content:'✕'; color:var(--crit); font-size:12px; margin-top:3px;}
+ul.tight.plain li::before{content:'·'; color:var(--ink-3); font-size:18px; margin-top:-3px;}
+ul.tight b{color:var(--ink-1); font-weight:620; display:block;}
+
+/* ---------- the work row ---------- */
+.works{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; align-items:stretch;}
+.work{display:flex; flex-direction:column;}
+.slot{
+  position:relative; border:1px dashed var(--axis); border-radius:10px; overflow:hidden;
+  display:grid; place-items:center; text-align:center; color:var(--ink-3); font-size:12.5px;
+  height:440px; margin:14px 0 12px; background:color-mix(in srgb,var(--base) 55%,transparent);
+}
+.slot>img,.slot>video{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:var(--base);}
+.slot:has(img,video){border-style:solid; border-color:var(--ring);}
+.preview{
+  height:440px; margin:14px 0 12px; border-radius:10px; border:1px solid var(--ring); padding:18px;
+  background:color-mix(in srgb,var(--base) 55%,transparent); display:flex; flex-direction:column; gap:14px;
+}
+.preview .hl{font-size:19px; font-weight:650; letter-spacing:-0.02em; line-height:1.3;}
+.preview .hl span{color:var(--ink-3);}
+.mini{display:grid; grid-template-columns:1fr auto auto; gap:6px 14px; font-size:12.5px; color:var(--ink-2); font-variant-numeric:tabular-nums;}
+.mini .h{font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); font-weight:650;}
+.mini .t{color:var(--s1); font-weight:600; text-align:right;} .mini .l{color:var(--s2); font-weight:600; text-align:right;}
+.preview ul{margin:0; padding-left:16px; font-size:13px; color:var(--ink-2); display:flex; flex-direction:column; gap:6px;}
+.btn{
+  display:inline-flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600; text-decoration:none;
+  padding:9px 14px; border-radius:10px; border:1px solid color-mix(in srgb,var(--s1) 45%,transparent);
+  color:var(--s1); background:var(--wash); margin-top:auto; align-self:flex-start;
+}
+.btn:hover{background:color-mix(in srgb,var(--s1) 16%,transparent);}
+
+/* ---------- tables ---------- */
+.tblwrap{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-radius:var(--radius); overflow-x:auto;
+}
+table{width:100%; border-collapse:collapse; font-size:14px;}
+th,td{text-align:left; padding:11px 16px; border-bottom:1px solid var(--grid); vertical-align:top;}
+th{
+  font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-3);
+  font-weight:640; background:color-mix(in srgb,var(--base) 42%, transparent);
+}
+tr:last-child td{border-bottom:none;}
+td.n{font-variant-numeric:tabular-nums; white-space:nowrap;}
+td:first-child{color:var(--ink-1);}
+td{color:var(--ink-2);}
+th.t{color:var(--s1);} th.l{color:var(--s2);}
+td.win{color:var(--ink-1); font-weight:600;}
+td.win::after{content:" ●"; color:var(--s1); font-size:10px; vertical-align:middle;}
+tr.hi td{background:color-mix(in srgb,var(--s1) 8%,transparent);}
+tr.lo td{background:color-mix(in srgb,var(--crit) 7%,transparent);}
+table.wide{min-width:720px;}
+
+/* ---------- bars ---------- */
+.bars{display:flex; flex-direction:column; gap:7px; margin-top:16px;}
+.brow{display:grid; grid-template-columns:minmax(120px,290px) 1fr; gap:14px; align-items:center;}
+.blab{font-size:13px; color:var(--ink-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.btrack{height:22px; display:flex; align-items:center; gap:9px;}
+.bfill{height:16px; border-radius:0 4px 4px 0; transition:width .55s cubic-bezier(.2,.7,.3,1); min-width:2px;}
+.bval{font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--ink-2); white-space:nowrap;}
+.axisline{height:1px; background:var(--axis); margin:12px 0 6px;}
+.ticks{display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-3); font-variant-numeric:tabular-nums;}
+.tg{display:inline-block; font-size:10px; font-weight:700; line-height:1; padding:3px 4px; border-radius:3px; margin-right:7px; vertical-align:1px;}
+.tg.t{color:var(--s1); background:color-mix(in srgb,var(--s1) 15%,transparent);}
+.tg.l{color:var(--s2); background:color-mix(in srgb,var(--s2) 16%,transparent);}
+.f-t{background:var(--s1);} .f-l{background:var(--s2);}
+
+/* ---------- ranked actions (native <details>) ---------- */
+.acc{display:flex; flex-direction:column; gap:10px;}
+details.item{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-radius:var(--radius); overflow:hidden;
+}
+details.item[open]{border-color:color-mix(in srgb,var(--s1) 30%,var(--ring));}
+details.item summary{display:flex; gap:14px; align-items:center; padding:15px 18px; cursor:pointer; list-style:none;}
+details.item summary::-webkit-details-marker{display:none;}
+details.item summary:hover{background:var(--wash);}
+.rank{
+  flex:none; width:26px; height:26px; border-radius:8px; display:grid; place-items:center;
+  font-size:12.5px; font-weight:680; background:var(--wash); color:var(--s1);
+}
+details.item[open] .rank{background:var(--s1); color:var(--base);}
+.ititle{font-size:15px; font-weight:620; flex:1;}
+.sev{font-size:11px; font-weight:660; letter-spacing:.04em; text-transform:uppercase; padding:3px 9px; border-radius:999px; white-space:nowrap; flex:none;}
+.sev.now{color:var(--s3); background:color-mix(in srgb,var(--s3) 14%,transparent);}
+.sev.high{color:var(--s1); background:color-mix(in srgb,var(--s1) 13%,transparent);}
+.sev.med{color:var(--ink-2); background:color-mix(in srgb,var(--ink-3) 15%,transparent);}
+.caret{flex:none; color:var(--ink-3); font-size:12px; transition:transform .22s;}
+details.item[open] .caret{transform:rotate(90deg);}
+.ibody{padding:0 18px 18px 58px; font-size:14.5px; color:var(--ink-2);}
+.ibody ul{margin:8px 0 0; padding-left:18px;}
+.fix{
+  border-left:2px solid var(--s1); background:color-mix(in srgb,var(--s1) 6%,transparent);
+  padding:11px 14px; border-radius:0 9px 9px 0; margin-top:10px; color:var(--ink-1); font-size:14px;
+}
+details.raw{margin-top:12px;}
+details.raw > summary{
+  cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;
+  font-size:14px; font-weight:620; padding:14px 18px; border:1px solid var(--ring); border-radius:var(--radius);
+  background:var(--surface-1); backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+}
+details.raw > summary::-webkit-details-marker{display:none;}
+details.raw > summary::after{content:"Show ▾"; font-size:12px; font-weight:500; color:var(--ink-3);}
+details.raw[open] > summary::after{content:"Hide ▴";}
+details.raw.tbl[open] > summary{border-radius:var(--radius) var(--radius) 0 0;}
+details.raw.tbl > .tblwrap{border-radius:0 0 var(--radius) var(--radius); border-top:none;}
+
+.fair{font-size:14px; color:var(--ink-2); max-width:72ch; margin-top:16px; border-left:2px solid var(--axis); padding-left:14px;}
+.fair b{display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin-bottom:4px;}
+
+/* ---------- checklist ---------- */
+.checks{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:10px;}
+.check{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-radius:11px; padding:16px 18px;
+  font-size:14.5px; color:var(--ink-2); display:flex; gap:12px; align-items:flex-start;
+}
+.check b{color:var(--ink-1); font-weight:640; display:block; font-size:15px; margin-bottom:3px;}
+.check .bx{color:var(--s1); flex:none; font-size:13px; margin-top:3px;}
+
+/* ---------- kicker ---------- */
+.kicker{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-radius:var(--radius);
+  padding:28px 32px; margin-top:16px;
+}
+.kicker p{font-size:19px; color:var(--ink-1); line-height:1.5; margin:0; letter-spacing:-0.01em;}
+.kicker p + p{margin-top:12px; font-size:15px; color:var(--ink-2);}
+.kicker ol{margin:14px 0 0; padding-left:20px; color:var(--ink-2); font-size:15px; display:flex; flex-direction:column; gap:8px;}
+.kicker ol b{color:var(--ink-1);}
+
+/* ---------- resume ---------- */
+.resume{display:flex; flex-direction:column; gap:12px; max-width:860px;}
+.resume img{width:100%; height:auto; display:block; border-radius:10px; border:1px solid var(--ring); background:#fff;}
+.kicker .close{margin-top:16px; font-size:15px; color:var(--ink-1); font-weight:600;}
+.resume-actions{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;}
+
+footer{margin-top:60px; padding:34px 0 60px; font-size:13px; color:var(--ink-3);}
+footer::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--ink-3) 34%, transparent) 20%,
+    color-mix(in srgb, var(--ink-3) 34%, transparent) 80%, transparent);
+}
+footer a{color:var(--ink-2);}
+
+/* tablet: design + reel side by side, research card full width under them; two-row top bar */
+@media (max-width:900px){
+  .works{grid-template-columns:1fr 1fr;}
+  .works .work:last-child{grid-column:1 / -1;}
+  .preview{height:auto;}
+  .topbar-in{flex-wrap:wrap; height:auto; gap:4px 12px; padding-top:9px; padding-bottom:4px;}
+  .brand{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis;}
+  .navlinks{order:3; width:100%; margin-left:0; padding-bottom:4px;}
+  .navlinks a{padding:7px 10px;}
+  section{scroll-margin-top:104px;}
+}
+/* phone: one column, media sized to the screen */
+@media (max-width:640px){
+  .works{grid-template-columns:1fr;}
+  .works .work:last-child{grid-column:auto;}
+  .slot{height:auto; aspect-ratio:4/5; max-height:72vh; width:100%; max-width:calc(72vh * 4 / 5); margin-left:auto; margin-right:auto;}
+  .slot.r916{aspect-ratio:9/16; max-height:78vh; max-width:calc(78vh * 9 / 16);}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px;}
+  .brow{grid-template-columns:1fr; gap:2px;}
+  .hero{padding:38px 0 6px;}
+  /* phone top bar: just the name, and the section links swipe sideways with a fade hinting at more */
+  .brand span{display:none;}
+  .navlinks{-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent); mask-image:linear-gradient(90deg,#000 88%,transparent);}
+  .kicker{padding:22px 20px;}
+  .ibody{padding-left:18px;}
+  /* suggestion rows: let the priority pill sit under the title instead of squeezing it */
+  details.item summary{flex-wrap:wrap; gap:10px 12px; padding:14px 16px;}
+  details.item summary .ititle{flex:1 1 calc(100% - 80px);}
+  details.item summary .sev{order:4; margin-left:38px;}
+  .preview .hl{font-size:17px;}
+  footer{line-height:1.9;}
+}
+@media (prefers-reduced-motion:reduce){
+  .bfill,.navlinks a::after,.caret{transition:none!important;}
+}
+@media print{
+  .topbar,.scanner-band{display:none!important;}
+  html{background:#fff;} body{color:#000;}
+  .card,.tile,.check,.kicker,.callout,.tblwrap,details{background:#fff!important; backdrop-filter:none!important;}
+}
+
+/* ---------- skim layer: highlights, findings, one-line suggestions ---------- */
+.glance{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:26px;}
+.g{display:block; text-decoration:none; color:inherit; padding:14px 16px; border-radius:12px; border:1px solid var(--ring);
+  background:var(--surface-1); backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass); transition:border-color .2s;}
+.g:hover{border-color:color-mix(in srgb,var(--s1) 45%,var(--ring));}
+.gv{display:block; font-size:28px; font-weight:660; letter-spacing:-0.03em; line-height:1.1; color:var(--s1);}
+.gl{display:block; font-size:12.5px; color:var(--ink-2); margin-top:4px; line-height:1.4;}
+.finds{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:10px; margin-top:12px;}
+.find{padding:14px 16px; border-radius:11px; border:1px solid var(--ring); border-left:3px solid var(--s1);
+  background:var(--surface-1); backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass); font-size:14px; color:var(--ink-2);}
+.find b{display:block; color:var(--ink-1); font-weight:640; font-size:14.5px; margin-bottom:2px;}
+.ititle small{display:block; font-size:13px; font-weight:450; color:var(--ink-2); margin-top:2px; letter-spacing:0;}
+.toolbtn{font:inherit; font-size:12.5px; padding:5px 11px; border-radius:8px; cursor:pointer; border:1px solid var(--ring); background:transparent; color:var(--ink-2);}
+.toolbtn:hover{background:var(--wash); color:var(--ink-1);}
+.grp-row{display:flex; align-items:center; justify-content:space-between; gap:12px; margin:22px 0 10px;}
+.grp-row h3.grp{margin:0;}
+@media (max-width:760px){ .glance{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:640px){ .tiles{grid-template-columns:repeat(2,1fr);} .tile{padding:14px;} .tile .v{font-size:24px;} .tile .v .vs-l{display:block; font-size:13px; margin-top:4px;} }
+
+/* ---------- reading modes: skim (default) hides supporting text, detail shows everything ---------- */
+html[data-mode="skim"] .d-only{display:none !important;}
+html[data-mode="detail"] .s-only{display:none !important;}
+.check .dt{display:block;}
+html[data-mode="skim"] .check .dt{display:none;}
+html[data-mode="skim"] .check{padding:12px 16px; align-items:center;}
+html[data-mode="skim"] .check b{margin-bottom:0;}
+.modes{display:inline-flex; gap:2px; padding:3px; border:1px solid var(--ring); border-radius:10px; background:var(--surface-1); flex:none;}
+.modes button{font:inherit; font-size:12.5px; font-weight:600; border:0; background:transparent; color:var(--ink-2); padding:6px 11px; border-radius:7px; cursor:pointer; white-space:nowrap;}
+.modes button:hover{color:var(--ink-1);}
+.modes button[aria-pressed="true"]{background:var(--s1); color:var(--base);}
+.modes small{font-size:11px; font-weight:500; margin-left:5px; opacity:.85;}
+.topbar .modes{margin-left:8px;}
+.modebar{display:flex; align-items:center; justify-content:space-between; gap:12px 18px; flex-wrap:wrap; margin-top:22px; padding:12px 14px;
+  border:1px dashed var(--axis); border-radius:12px; font-size:14px; color:var(--ink-2); max-width:760px;}
+.modebar b{color:var(--ink-1);}
+.skimnote{font-size:14px; color:var(--ink-3); margin:14px 0 0;}
+.linkbtn{font:inherit; color:var(--s1); background:none; border:0; padding:0; text-decoration:underline; cursor:pointer;}
+.topbar .modes small{display:none;}
+@media (max-width:1180px){ .brand span{display:none;} }
+@media (max-width:640px){ .topbar .modes button{padding:5px 9px;} }
+
+/* skim trims: section intros, work-card subtitles and bullets, finding details, idea one-liners, research sub-intros */
+html[data-mode="skim"] .sec-head p,
+html[data-mode="skim"] .works .card-title + .card-sub,
+html[data-mode="skim"] .preview ul,
+html[data-mode="skim"] .find .dt,
+html[data-mode="skim"] .ititle small,
+html[data-mode="skim"] #research .sub p{display:none;}
+.find .dt{display:block;}
+html[data-mode="skim"] .find{padding:12px 16px;}
+
+/* ---------- candidate_requirements.txt: their hiring checklist, ticked with proof ---------- */
+.reqwin{margin-top:28px; max-width:760px; background:#f4f3e5; color:#100f0f; border:2px solid #100f0f;
+  box-shadow:10px 10px 0 #e2558c; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  background-image:repeating-linear-gradient(0deg, rgba(16,15,15,.035) 0 1px, transparent 1px 3px);}
+.reqbar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 14px;
+  border-bottom:2px solid #100f0f; background:#fbfaf2; font-size:15px; font-weight:600;}
+.reqbtns{display:flex; gap:8px;}
+.reqbtns i{font-style:normal; width:26px; height:26px; border:2px solid #100f0f; display:grid; place-items:center; font-size:13px; line-height:1;}
+.reqlist{list-style:none; margin:0; padding:10px 0;}
+.reqlist a{display:grid; grid-template-columns:auto 1fr auto; gap:2px 16px; align-items:center; padding:10px 18px; color:inherit; text-decoration:none; cursor:pointer; border-top:1px dashed rgba(16,15,15,.18); transition:background .15s;}
+.reqlist li:first-child a{border-top:none;}
+.reqlist a:focus-visible{background:rgba(226,85,140,.13); outline:none;}
+@media (hover:hover){ .reqlist a:hover{background:rgba(226,85,140,.13);} .reqlist a:hover .rq{text-decoration:underline; text-decoration-color:#e2558c; text-underline-offset:4px; text-decoration-thickness:2px;} .reqlist a:hover .go{transform:translate(-1px,-1px); box-shadow:4px 4px 0 #e2558c; background:#fff;} }
+.reqlist a:focus-visible .rq{text-decoration:underline; text-decoration-color:#e2558c; text-underline-offset:4px; text-decoration-thickness:2px;}
+.reqlist .go{grid-column:3; grid-row:1 / span 2; font-size:12px; font-weight:700; white-space:nowrap; padding:5px 9px; border:2px solid #100f0f;
+  background:#fbfaf2; box-shadow:3px 3px 0 #e2558c; transition:transform .15s, box-shadow .15s;}
+.reqlist a:focus-visible .go{transform:translate(-1px,-1px); box-shadow:4px 4px 0 #e2558c; background:#fff;}
+.reqhint{font-style:normal; font-weight:500; font-size:12px; color:#6b6a72; margin-left:10px;}
+.reqlist .box{font-size:17px; font-weight:700; white-space:pre; grid-row:span 2; align-self:start;}
+.reqlist .box.on{color:#5b3fc4;}
+.reqlist .rq{font-size:17px; font-weight:700;}
+.reqlist .pf{font-family:var(--font); font-size:13.5px; color:#4d4c55; line-height:1.45;}
+.reqstatus{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:9px 14px; border-top:2px solid #100f0f;
+  font-size:12.5px; background:#fbfaf2;}
+.reqnote{font-size:13px; color:var(--ink-3); margin-top:22px;}
+.tagreq{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; text-transform:none; letter-spacing:0; font-weight:600;
+  color:var(--s1); margin-left:10px; white-space:nowrap;}
+@media (max-width:640px){
+  .reqwin{box-shadow:6px 6px 0 #e2558c; margin-right:6px;}
+  .reqbar{font-size:13px;} .reqlist a{padding:10px 12px; gap:2px 10px;}
+  .reqhint{display:block; margin:2px 0 0;}
+  .reqlist .go{font-size:0; padding:4px 8px;} .reqlist .go::after{content:"↓"; font-size:14px;}
+  .reqlist .box,.reqlist .rq{font-size:15px;}
+}
+
+/* ---------- research summary + groups ---------- */
+.tile .v .vs-l{font-size:15px; font-weight:560; color:var(--s2); letter-spacing:0;}
+h3.grp{font-size:14px; font-weight:650; color:var(--ink-2); margin:22px 0 10px; letter-spacing:0;}
+details.full > summary{color:var(--s1); border-color:color-mix(in srgb,var(--s1) 35%,var(--ring));}
+details.full .rawbody{padding-top:4px;}
+details.full .rawbody > .sub:first-child{margin-top:22px;}
+
+/* ---------- zoomable design (native <dialog>) ---------- */
+.slot.zoomable img{cursor:zoom-in;}
+dialog.zoom{padding:0; border:none; background:transparent; width:100vw; height:100vh; max-width:none; max-height:none;}
+dialog.zoom::backdrop{background:rgba(0,0,0,.88);}
+.zoom-inner{width:100%; height:100%; overflow:auto; display:grid; place-items:center;}
+.zoom-inner img{max-width:94vw; max-height:94vh; cursor:zoom-in; display:block;}
+.zoom-inner.full{display:block;}
+.zoom-inner.full img{max-width:none; max-height:none; margin:0 auto; cursor:zoom-out;}
+.zoom-close{
+  position:fixed; top:14px; right:14px; z-index:2; width:40px; height:40px; border-radius:10px; cursor:pointer;
+  border:1px solid rgba(255,255,255,.25); background:rgba(0,0,0,.55); color:#fff; font-size:16px;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <div class="brand">Samyukth Bitra <span>· for The5ers India</span></div>
+    <nav class="navlinks">
+      <a href="#work">Work</a>
+      <a href="#inside">The5ers India</a>
+      <a href="#trading">Trading</a>
+      <a href="#research">Research</a>
+      <a href="#me">About me</a>
+      <a href="#help">The role</a>
+      <a href="#resume">Resume</a>
+    </nav>
+    <div class="modes" role="group" aria-label="Reading mode"><button type="button" data-set="skim" aria-pressed="true">Skim<small data-time="skim"></small></button><button type="button" data-set="detail" aria-pressed="false">Detail<small data-time="detail"></small></button></div>
+    <button class="iconbtn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle theme">◐</button>
+  </div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+</div>
+
+<div class="scanner-band" aria-hidden="true">
+  <div class="scanner-container" id="scanner"></div>
+  <div class="scanner-scrim"></div>
+</div>
+
+<div class="herowrap">
+  <div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Application · Marketing · The5ers India</div>
+    <h1>Hi The5ers team.</h1>
+    <p class="lede s-only">I'm Samyukth Bitra. I moderate The5ers India's Telegram community, I have been trading with prop firms since May 2024, and I want to work in The5ers' marketing.</p>
+    <p class="lede d-only">I'm Samyukth Bitra. I already work with The5ers India as a community moderator on Telegram, where I answer traders in English and Hinglish every day. I work in social media, content and community marketing: I have been a content strategist for a trading education account with 517K followers, and I have produced live streams and edited videos for a The5ers host. I have been trading with prop firms since May 2024.</p>
+    <p class="lede d-only" style="margin-top:0">This page starts with my work, followed by my experience with The5ers, my trading background, my research on The5ers India's Instagram, and more about me. My resume is at the end.</p>
+    <div class="meta">
+      <span class="chip verified">Community moderator · The5ers India</span>
+      <span class="chip">Trading prop firms since May 2024</span>
+      <span class="chip">English · Hindi · Telugu</span>
+      <span class="chip">DaVinci Resolve · Final Cut Pro · Canva</span>
+      <span class="chip">Available immediately · remote</span>
+      <span class="chip">samyukthbitra@gmail.com</span>
+    </div>
+    <div class="modebar">
+      <span><b>Short on time?</b> Skim mode shows the key points<span class="mb-time"></span>. Detail mode shows every number.</span>
+      <div class="modes" role="group" aria-label="Reading mode"><button type="button" data-set="skim" aria-pressed="true">Skim<small data-time="skim"></small></button><button type="button" data-set="detail" aria-pressed="false">Detail<small data-time="detail"></small></button></div>
+    </div>
+    <!-- Their hiring post listed these seven, so each one is ticked with a line of proof and a link to it -->
+    <div class="reqwin" id="reqs" role="region" aria-label="Candidate requirements, all seven met">
+      <div class="reqbar"><span>candidate_requirements.txt <em class="reqhint">click a line to see the proof</em></span><span class="reqbtns" aria-hidden="true"><i>_</i><i>×</i></span></div>
+      <ul class="reqlist">
+        <li><a href="#work"><span class="box">[✓]</span><span class="rq">quirky</span><span class="pf">I send audits instead of CVs. This page is exhibit B.</span><span class="go" aria-hidden="true">proof ↓</span></a></li>
+        <li><a href="#inside"><span class="box">[✓]</span><span class="rq">knows prop firms inside out</span><span class="pf">I answer The5ers rules, payout and KYC questions every day. Ask me about the 40% consistency rule.</span><span class="go" aria-hidden="true">proof ↓</span></a></li>
+        <li><a href="#trading"><span class="box">[✓]</span><span class="rq">lives &amp; breathes markets</span><span class="pf">Trading prop firm accounts since May 2024, and talking markets with traders 8+ hours a day.</span><span class="go" aria-hidden="true">proof ↓</span></a></li>
+        <li><a href="#research"><span class="box">[✓]</span><span class="rq">super smart</span><span class="pf">A study of all 90 posts on @the5ersindia, a 108-post content audit, and a B.Tech in AI &amp; ML (CGPA 8.43).</span><span class="go" aria-hidden="true">proof ↓</span></a></li>
+        <li><a href="#me"><span class="box">[✓]</span><span class="rq">proven track record</span><span class="pf">+80% average views per reel (10K → 18K) on a 517K-follower trading account.</span><span class="go" aria-hidden="true">proof ↓</span></a></li>
+        <li><a href="#tools"><span class="box">[✓]</span><span class="rq">tech geek</span><span class="pf">Built a Discord bot that alerts traders 10 minutes before high-impact news, and my own trading journal apps.</span><span class="go" aria-hidden="true">proof ↓</span></a></li>
+        <li><a href="#help"><span class="box">[✓]</span><span class="rq">loads of experience</span><span class="pf">Moderator, content strategist, stream producer and editor, community manager and event speaker, all in trading.</span><span class="go" aria-hidden="true">proof ↓</span></a></li>
+      </ul>
+      <div class="reqstatus"><span id="reqcount">7/7 checked</span><span>each line links to the proof ↓</span></div>
+    </div>
+</div>
+  </header>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ 01 MY WORK ============ -->
+  <section id="work">
+    <div class="sec-head">
+      <span class="num">01 · MY WORK<span class="tagreq">[✓] quirky</span></span>
+      <h2>Work samples</h2>
+      <p>An edited reel, a content audit, and research on The5ers India's Instagram.</p>
+    </div>
+
+    <div class="works">
+      <div class="card work">
+        <div class="card-title">Edited reel</div>
+        <div class="card-sub">"Ranking your Trading Personality"</div>
+        <div class="slot r916" data-media="assets/reel.mp4" data-poster="assets/reel-poster.jpg">Reel not found at<br>assets/reel.mp4</div>
+        <div class="card-sub">A tier-list reel for The Shades of Trades, scripted and edited in DaVinci Resolve.</div>
+      </div>
+      <div class="card work">
+        <div class="card-title">Content audit</div>
+        <div class="card-sub">@theshadesoftrades · click the image to enlarge</div>
+        <div class="slot zoomable" data-media="assets/audit-preview.jpg">Preview not found at<br>assets/audit-preview.jpg</div>
+        <div class="card-sub">108 posts audited on my own initiative, with six findings ranked by impact and a 30-day plan. <a href="https://samyukth-774.github.io/Shades-Of-Trades-Audit/" target="_blank" rel="noopener">Open the full audit ↗</a></div>
+      </div>
+      <div class="card work">
+        <div class="card-title">Instagram research</div>
+        <div class="card-sub">@the5ersindia · all 90 posts</div>
+        <div class="preview">
+          <div class="hl">Creators bring the reach. <span>Events bring the engagement.</span></div>
+          <div class="mini">
+            <span class="h">Sep 2025 – Oct 2026</span><span class="h" style="text-align:right"></span><span class="h" style="text-align:right"></span>
+            <span>Reel plays from 3 creator collabs</span><span></span><span class="t">89%</span>
+            <span>Median likes, event posts</span><span></span><span class="t">198</span>
+            <span>Median likes, all posts</span><span></span><span class="t">38</span>
+          </div>
+          <ul>
+            <li>Three creator Reels got 923k, 570k and 551k plays.</li>
+            <li>The bio has no link to the Telegram community.</li>
+            <li>Includes five ideas and every post's numbers.</li>
+          </ul>
+          <a class="btn" href="#research">See the research ↓</a>
+        </div>
+        <div class="card-sub">Read on 19 October 2026 from the public profile and Reels tab.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 02 INSIDE THE5ERS INDIA ============ -->
+  <section id="inside">
+    <div class="sec-head">
+      <span class="num">02 · THE5ERS INDIA<span class="tagreq">[✓] knows prop firms inside out</span></span>
+      <h2>My work with The5ers</h2>
+      <p>I already work with The5ers India's community and traders every day.</p>
+    </div>
+    <div class="checks">
+      <div class="check"><span class="bx">◆</span><div><b>Community moderator, The5ers India</b><span class="dt">8+ hours a day on Telegram since July 2026: rules, payouts, KYC and platform questions, routing account issues to support, and removing spam.</span></div></div>
+      <div class="check"><span class="bx">◆</span><div><b>I write in the brand's voice</b><span class="dt">Pinned explainers, announcements and daily replies in English and Hinglish, written to be clear and correct the first time.</span></div></div>
+      <div class="check"><span class="bx">◆</span><div><b>I have worked with a The5ers host</b><span class="dt">Oct 2025 – Jun 2026: produced live streams and edited videos for Will Davis.</span></div></div>
+      <div class="check"><span class="bx">◆</span><div><b>I managed a trader community</b><span class="dt">The Apex Brotherhood Discord for Will Davis: announcements, rules and engagement.</span></div></div>
+      <div class="check"><span class="bx">◆</span><div><b>The5ers invited me to speak</b><span class="dt">At a Trade The Pool event in December 2025. I wrote and gave a talk on risk limits, drawdown and rule discipline for aspiring funded traders.</span></div></div>
+      <div class="check"><span class="bx">◆</span><div><b>I know the Indian trading audience</b><span class="dt">What it asks, what worries it, and how it talks, in English and Hinglish.</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============ 03 TRADING ============ -->
+  <section id="trading">
+    <div class="sec-head">
+      <span class="num">03 · TRADING<span class="tagreq">[✓] lives &amp; breathes markets</span></span>
+      <h2>My trading background</h2>
+      <p>Trading is what brought me into the prop industry, and it is where I want to build my career.</p>
+    </div>
+    <div class="checks">
+      <div class="check"><span class="bx">◆</span><div><b>Trading since May 2024</b><span class="dt">Evaluation and funded accounts with prop firms, in futures and CFDs.</span></div></div>
+      <div class="check"><span class="bx">◆</span><div><b>Experience with several firms</b><span class="dt">I have traded with various prop firms, so I have seen how each one handles rules, payouts and support.</span></div></div>
+      <div class="check"><span class="bx">◆</span><div><b>I know the rules</b><span class="dt">Drawdown limits, consistency, scaling, payouts and KYC. I answer questions on The5ers' rules every day without looking them up.</span></div></div>
+      <div class="check"><span class="bx">◆</span><div><b>How I learned</b><span class="dt">By trading, and by reading each firm's rules and FAQs closely.</span></div></div>
+      <div class="check"><span class="bx">◆</span><div><b>I am passionate about trading</b><span class="dt">I follow the markets every day, and I talk about them with traders for 8+ hours a day.</span></div></div>
+      <div class="check"><span class="bx">◆</span><div><b>A career in the prop industry</b><span class="dt">I want to build my career in this industry, beyond trading myself.</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============ 04 RESEARCH ============ -->
+  <section id="research">
+    <div class="sec-head">
+      <span class="num">04 · RESEARCH<span class="tagreq">[✓] super smart</span></span>
+      <h2>The5ers India on Instagram</h2>
+      <p>Every post on @the5ersindia from 11 September 2025 to 16 October 2026, read on 19 October 2026. Summary first, then ideas, then the full data.</p>
+    </div>
+    <div class="meta" style="margin-top:-8px">
+      <span class="chip verified">@the5ersindia · 7,932 followers</span>
+      <span class="chip">90 posts in 13 months</span>
+      <span class="chip">40 Reels · 2.28M plays</span>
+    </div>
+    <p class="s-only skimnote">An outside view from public data, as shown on Instagram on 19 October 2026.</p>
+    <div class="callout d-only">
+      <div class="ct">Read this with a pinch of salt</div>
+      Likes and comments are what Instagram shows on each post; plays are from the Reels tab, where a collab counts both audiences. Saves, shares, reach and link taps are only visible in The5ers' own Insights, so the real picture may differ. I read 85 of the 90 posts; the other five did not load in the grid.
+    </div>
+
+    <!-- 4.1 summary -->
+    <div class="sub"><span class="k">4.1</span><h3>Summary</h3><p>A young, multilingual account that posts about 7 times a month in English, Hinglish and Hindi. Its reach comes from creators and its engagement comes from events.</p></div>
+    <div class="tiles">
+      <div class="tile"><div class="k">Followers</div><div class="v">7,932</div><div class="d">account started September 2025</div></div>
+      <div class="tile"><div class="k">Median likes per post</div><div class="v">38</div><div class="d">across 77 of its own posts</div></div>
+      <div class="tile"><div class="k">Reel plays</div><div class="v">2.28M</div><div class="d">across 40 Reels</div></div>
+      <div class="tile"><div class="k">From 3 creator Reels</div><div class="v ok">89%</div><div class="d">2.04M of the 2.28M plays</div></div>
+    </div>
+    <div class="finds">
+      <div class="find"><b>Creator collabs bring the reach</b><span class="dt">Three creator Reels with the code ARHAAN5 got 923k, 570k and 551k plays.</span></div>
+      <div class="find"><b>Events bring the engagement</b><span class="dt">Tournaments, conclaves and meetups: median 198 likes, about 5× the account median.</span></div>
+      <div class="find"><b>Trader stories are steady</b><span class="dt">19 posts in one consistent format, median 46 likes. The best got 169.</span></div>
+      <div class="find"><b>Offers and product posts get the least</b><span class="dt">22 posts between them, median 34 and 20 likes.</span></div>
+      <div class="find"><b>Own Reels sit around 2k plays</b><span class="dt">Median 2,061 plays outside the three creator Reels.</span></div>
+      <div class="find"><b>The bio still leads with the Summer Plan</b><span class="dt">Two of five links are for the Summer Plan, and none goes to the Telegram community.</span></div>
+    </div>
+
+    <!-- 4.2 ideas -->
+    <div class="sub"><span class="k">4.2</span><h3>Ideas</h3><p>Each line is the idea; open it for the data behind it. These come from an outside view, to test against The5ers' own numbers.</p></div>
+    <div class="grp-row"><h3 class="grp">Five ideas</h3><button class="toolbtn" id="expandAll" type="button">Expand all</button></div>
+    <div class="acc">
+      <details class="item">
+        <summary><span class="rank">1</span><span class="ititle">More creator collabs<small>A regular programme with Indian trading creators, each with their own code.</small></span><span class="sev high">High</span><span class="caret">▶</span></summary>
+        <div class="ibody">Three creator Reels with the code ARHAAN5 got 2.04M plays between them, 89% of all Reel plays on the account. The account itself has 7,932 followers, and its own Reels have a median of 2,061 plays.
+          <div class="fix"><b>Idea:</b> a shortlist of Indian trading and finance creators, first-touch outreach, a code per creator, and one sheet that tracks plays, sign-ups and codes used.</div></div>
+      </details>
+      <details class="item">
+        <summary><span class="rank">2</span><span class="ititle">Every event as a series<small>Posts before, during and after each tournament and conclave.</small></span><span class="sev high">High</span><span class="caret">▶</span></summary>
+        <div class="ibody">Event posts have a median of 198 likes against 38 for the account. The Hyderabad conclave carousel got 496 likes, and event Reels got 20.7k to 73.7k plays. The Indore and cricket highlights show events are already part of the account's identity.
+          <div class="fix"><b>Idea:</b> a set plan for every event: an announcement, a countdown, the day itself, and a recap with the traders who came.</div></div>
+      </details>
+      <details class="item">
+        <summary><span class="rank">3</span><span class="ititle">Trader stories in video<small>Short Hinglish clips from the funded-trader interviews.</small></span><span class="sev high">High</span><span class="caret">▶</span></summary>
+        <div class="ibody">Nineteen trader stories in one static format have a median of 46 likes. A funded-trader interview is already linked in the bio on YouTube, so the footage exists.
+          <div class="fix"><b>Idea:</b> 30 to 45-second clips cut from those interviews, with the payout on screen, posted as collabs with the trader where possible.</div></div>
+      </details>
+      <details class="item">
+        <summary><span class="rank">4</span><span class="ititle">Offers in Stories, proof on the grid<small>One current offer and code, kept in Stories and a highlight.</small></span><span class="sev med">Medium</span><span class="caret">▶</span></summary>
+        <div class="ibody">Offer posts have a median of 34 likes and product updates 20. Black Friday and Cyber Monday got 15 likes each. In the Telegram community, traders ask for the current code every day.
+          <div class="fix"><b>Idea:</b> a pinned Story highlight with the live offer, code and end date, so the grid can carry events, traders and payouts.</div></div>
+      </details>
+      <details class="item">
+        <summary><span class="rank">5</span><span class="ititle">A refreshed bio<small>The current offer first, plus a link to the Telegram community.</small></span><span class="sev now">Quick fix</span><span class="caret">▶</span></summary>
+        <div class="ibody">The bio links are: Connect AI with The5ers, a funded-trader interview, The5ers Futures, the Summer Plan, and a Summer Plan breakdown. In October, two of the five are still for the Summer Plan, and none goes to the Telegram community.
+          <div class="fix"><b>Idea:</b> the current offer at the top, then the Telegram community, YouTube and the main site, updated whenever an offer changes.</div></div>
+      </details>
+    </div>
+    <div class="callout good"><div class="ct">What already works</div>Events and tournaments that bring traders together in person, creator collabs, a consistent trader-story series, festival posts that feel local (Independence Day got 197 likes and Raksha Bandhan 195), and captions in English, Hinglish and Hindi.</div>
+
+    <!-- 4.3 full data -->
+    <div class="sub d-only"><span class="k">4.3</span><h3>Full data</h3><p>Every number behind the summary: likes by category, the top Reels, the bio and highlights, and every post.</p></div>
+    <p class="s-only skimnote">The full data (likes by category, top Reels, the bio and all 85 posts) is in <button type="button" class="linkbtn" data-set="detail">Detail mode</button>.</p>
+    <details class="raw full d-only">
+      <summary>Show the full data</summary>
+      <div class="rawbody">
+        <div class="sub"><span class="k">A</span><h3>Median likes by category</h3><p>The5ers India's own posts only; collabs are counted separately.</p></div>
+        <div class="card">
+          <div class="bars"><div class="brow"><div class="blab">Events</div><div class="btrack"><div class="bfill f-t" data-w="89.8"></div><div class="bval">198</div></div></div><div class="brow"><div class="blab">Competitions</div><div class="btrack"><div class="bfill f-t" data-w="21.8"></div><div class="bval">48</div></div></div><div class="brow"><div class="blab">Trader stories</div><div class="btrack"><div class="bfill f-t" data-w="20.9"></div><div class="bval">46</div></div></div><div class="brow"><div class="blab">Festivals</div><div class="btrack"><div class="bfill f-t" data-w="19.5"></div><div class="bval">43</div></div></div><div class="brow"><div class="blab">Offers</div><div class="btrack"><div class="bfill f-t" data-w="15.2"></div><div class="bval">34</div></div></div><div class="brow"><div class="blab">Education</div><div class="btrack"><div class="bfill f-t" data-w="11.4"></div><div class="bval">25</div></div></div><div class="brow"><div class="blab">Product updates</div><div class="btrack"><div class="bfill f-t" data-w="9.1"></div><div class="bval">20</div></div></div></div>
+          <div class="axisline"></div>
+          <div class="ticks"><span>0</span><span>110</span><span>220 likes</span></div>
+        </div>
+        <div class="tblwrap" style="margin-top:12px"><table><thead><tr><th>Category</th><th>Posts</th><th>Median likes</th><th>Best post (likes)</th></tr></thead><tbody><tr class="hi"><td>Events</td><td class="n">10</td><td class="n">198</td><td>Hyderabad conclave (496)</td></tr><tr><td>Competitions</td><td class="n">5</td><td class="n">48</td><td>The cup is open (501)</td></tr><tr><td>Trader stories</td><td class="n">19</td><td class="n">46</td><td>Adwait Borale (169)</td></tr><tr><td>Festivals</td><td class="n">9</td><td class="n">43</td><td>Independence Day (197)</td></tr><tr class="lo"><td>Offers</td><td class="n">12</td><td class="n">34</td><td>Summer Plan live (102)</td></tr><tr><td>Education</td><td class="n">7</td><td class="n">25</td><td>Strait of Hormuz (44)</td></tr><tr class="lo"><td>Product updates</td><td class="n">10</td><td class="n">20</td><td>Futures rewards (77)</td></tr></tbody></table></div>
+
+        <div class="sub"><span class="k">B</span><h3>Top Reels by plays</h3><p>From the Reels tab. Creator collabs are posted by the creator with @the5ersindia as a collaborator.</p></div>
+        <div class="tblwrap"><table style="min-width:560px"><thead><tr><th>Plays</th><th>Likes</th><th>Date</th><th>Reel</th></tr></thead><tbody>
+          <tr class="hi"><td class="n">923k</td><td class="n">34.2k</td><td class="n">23 Jun 2026</td><td>Creator collab, code ARHAAN5</td></tr>
+          <tr class="hi"><td class="n">570k</td><td class="n">7,791</td><td class="n">4 Aug 2026</td><td>Creator collab, code ARHAAN5</td></tr>
+          <tr class="hi"><td class="n">551k</td><td class="n">8,850</td><td class="n">11 Jul 2026</td><td>Creator collab, code ARHAAN5</td></tr>
+          <tr><td class="n">73.7k</td><td class="n">327</td><td class="n">12 Apr 2026</td><td>Football tournament registration (collab)</td></tr>
+          <tr><td class="n">24k</td><td class="n">453</td><td class="n">30 Mar 2026</td><td>Thank-you reel after a community event</td></tr>
+          <tr><td class="n">22.7k</td><td class="n">501</td><td class="n">29 May 2026</td><td>"The cup is open": trading competition</td></tr>
+          <tr><td class="n">20.7k</td><td class="n">188</td><td class="n">6 Apr 2026</td><td>Cricket tournament day (collab)</td></tr>
+        </tbody></table></div>
+        <p class="fair"><b>The other 33 Reels</b>Between 826 and 7,709 plays each, with a median of 2,015.</p>
+
+        <div class="sub"><span class="k">C</span><h3>Profile</h3></div>
+        <div class="two">
+          <div class="card"><h4>Bio</h4><ul class="tight plain">
+            <li><div>"$4M tak manage karein!"</div></li>
+            <li><div>"Evaluation shuru sirf $19 se!"</div></li>
+            <li><div>"Har Mahine Salary"</div></li>
+            <li><div>Verified · 7,932 followers · 14 following</div></li>
+          </ul></div>
+          <div class="card"><h4>Bio links and highlights</h4><ul class="tight plain">
+            <li><div>Connect AI with The5ers (YouTube)</div></li>
+            <li><div>Funded trader interview (YouTube)</div></li>
+            <li><div>The5ers Futures · The5ers Summer Plan · Summer Plan breakdown (YouTube)</div></li>
+            <li><div>Highlights: Certificates, 5ers ट्रेडर्स, Cricket, Trade Talks, Indore</div></li>
+          </ul></div>
+        </div>
+
+        <div class="sub"><span class="k">D</span><h3>Every post</h3><p>Newest first, as they appear on the grid. Likes and comments as shown on 19 October 2026.</p></div>
+        <details class="raw tbl">
+          <summary>All 85 posts, 11 Sep 2025 to 16 Oct 2026</summary>
+          <div class="tblwrap"><table class="wide"><thead><tr><th>#</th><th>Post</th><th>Type</th><th>Category</th><th>Likes</th><th>Comments</th></tr></thead><tbody><tr><td class="n">1</td><td>Sameer: trading confidence</td><td>Reel</td><td>Education</td><td class="n">7</td><td class="n">1</td></tr><tr><td class="n">2</td><td>The5ers MCP is live</td><td>Image</td><td>Product updates</td><td class="n">10</td><td class="n">0</td></tr><tr><td class="n">3</td><td>Gandhi Jayanti</td><td>Image</td><td>Festivals</td><td class="n">28</td><td class="n">0</td></tr><tr><td class="n">4</td><td>cryptotribe.in: before your first funded account</td><td>Reel · collab</td><td>Creator collabs</td><td class="n">93</td><td class="n">9</td></tr><tr><td class="n">5</td><td>Futures contract sizes</td><td>Carousel</td><td>Education</td><td class="n">25</td><td class="n">0</td></tr><tr><td class="n">6</td><td>High Stakes reduced prices</td><td>Image</td><td>Offers</td><td class="n">38</td><td class="n">5</td></tr><tr><td class="n">7</td><td>Subham Rout</td><td>Image</td><td>Trader stories</td><td class="n">56</td><td class="n">3</td></tr><tr><td class="n">8</td><td>Janmashtami</td><td>Image</td><td>Festivals</td><td class="n">43</td><td class="n">1</td></tr><tr><td class="n">9</td><td>Rishabh Singh</td><td>Image</td><td>Trader stories</td><td class="n">81</td><td class="n">2</td></tr><tr><td class="n">10</td><td>pratika.x ARHAAN5</td><td>Reel · collab</td><td>Creator collabs</td><td class="n">6,402</td><td class="n">20</td></tr><tr><td class="n">11</td><td>Adwait Borale</td><td>Image</td><td>Trader stories</td><td class="n">169</td><td class="n">13</td></tr><tr><td class="n">12</td><td>Raksha Bandhan</td><td>Image</td><td>Festivals</td><td class="n">195</td><td class="n">4</td></tr><tr><td class="n">13</td><td>Single Stock Futures</td><td>Image</td><td>Product updates</td><td class="n">26</td><td class="n">1</td></tr><tr><td class="n">14</td><td>Independence Day 10% off</td><td>Image</td><td>Offers</td><td class="n">28</td><td class="n">0</td></tr><tr><td class="n">15</td><td>Independence Day Hindi</td><td>Image</td><td>Festivals</td><td class="n">37</td><td class="n">2</td></tr><tr><td class="n">16</td><td>Independence Day</td><td>Image</td><td>Festivals</td><td class="n">197</td><td class="n">12</td></tr><tr><td class="n">17</td><td>Summer Plan $200K</td><td>Image</td><td>Offers</td><td class="n">59</td><td class="n">1</td></tr><tr><td class="n">18</td><td>Summer upgrade</td><td>Image</td><td>Offers</td><td class="n">22</td><td class="n">0</td></tr><tr><td class="n">19</td><td>Summer Boosters</td><td>Image</td><td>Offers</td><td class="n">33</td><td class="n">4</td></tr><tr><td class="n">20</td><td>Summer Plan Futures</td><td>Image</td><td>Offers</td><td class="n">34</td><td class="n">22</td></tr><tr><td class="n">21</td><td>Futures rewards</td><td>Reel</td><td>Product updates</td><td class="n">77</td><td class="n">3</td></tr><tr><td class="n">22</td><td>Summer breakout</td><td>Image</td><td>Offers</td><td class="n">25</td><td class="n">6</td></tr><tr><td class="n">23</td><td>Summer Plan live</td><td>Reel</td><td>Offers</td><td class="n">102</td><td class="n">19</td></tr><tr><td class="n">24</td><td>Summer turning point</td><td>Image</td><td>Offers</td><td class="n">97</td><td class="n">22</td></tr><tr><td class="n">25</td><td>keep learning</td><td>Image</td><td>Education</td><td class="n">31</td><td class="n">5</td></tr><tr><td class="n">26</td><td>funded traders make mistakes</td><td>Reel</td><td>Education</td><td class="n">29</td><td class="n">3</td></tr><tr><td class="n">27</td><td>Shorya holding time</td><td>Reel</td><td>Education</td><td class="n">25</td><td class="n">3</td></tr><tr><td class="n">28</td><td>Jagan Khosh</td><td>Image</td><td>Trader stories</td><td class="n">43</td><td class="n">4</td></tr><tr><td class="n">29</td><td>Trading World Championship</td><td>Image</td><td>Competitions</td><td class="n">17</td><td class="n">0</td></tr><tr><td class="n">30</td><td>The cup is open</td><td>Reel</td><td>Competitions</td><td class="n">501</td><td class="n">20</td></tr><tr><td class="n">31</td><td>biggest competitions</td><td>Image</td><td>Competitions</td><td class="n">48</td><td class="n">2</td></tr><tr><td class="n">32</td><td>beginner webinar</td><td>Image</td><td>Webinars</td><td class="n">42</td><td class="n">3</td></tr><tr><td class="n">33</td><td>Shorya Sharma</td><td>Image</td><td>Trader stories</td><td class="n">59</td><td class="n">7</td></tr><tr><td class="n">34</td><td>Football tournament</td><td>Reel · collab</td><td>Events</td><td class="n">132</td><td class="n">4</td></tr><tr><td class="n">35</td><td>Ankish Jaiswal</td><td>Image</td><td>Trader stories</td><td class="n">92</td><td class="n">3</td></tr><tr><td class="n">36</td><td>Football tournament</td><td>Carousel · collab</td><td>Events</td><td class="n">329</td><td class="n">12</td></tr><tr><td class="n">37</td><td>Football registration</td><td>Reel · collab</td><td>Events</td><td class="n">327</td><td class="n">15</td></tr><tr><td class="n">38</td><td>weekly challenge</td><td>Image</td><td>Competitions</td><td class="n">26</td><td class="n">1</td></tr><tr><td class="n">39</td><td>cricket day</td><td>Reel · collab</td><td>Events</td><td class="n">188</td><td class="n">1</td></tr><tr><td class="n">40</td><td>Currency Pips football</td><td>Image</td><td>Events</td><td class="n">98</td><td class="n">8</td></tr><tr><td class="n">41</td><td>thanks community</td><td>Reel</td><td>Events</td><td class="n">453</td><td class="n">19</td></tr><tr><td class="n">42</td><td>Mithun Arvindnath</td><td>Image</td><td>Trader stories</td><td class="n">42</td><td class="n">1</td></tr><tr><td class="n">43</td><td>Hyderabad conclave</td><td>Carousel</td><td>Events</td><td class="n">496</td><td class="n">20</td></tr><tr><td class="n">44</td><td>cricket tournament</td><td>Carousel</td><td>Events</td><td class="n">437</td><td class="n">6</td></tr><tr><td class="n">45</td><td>Indore to Hyderabad</td><td>Reel</td><td>Events</td><td class="n">268</td><td class="n">29</td></tr><tr><td class="n">46</td><td>Strait of Hormuz</td><td>Image</td><td>Education</td><td class="n">44</td><td class="n">5</td></tr><tr><td class="n">47</td><td>safe havens</td><td>Image</td><td>Education</td><td class="n">22</td><td class="n">2</td></tr><tr><td class="n">48</td><td>trading approach webinar</td><td>Image</td><td>Webinars</td><td class="n">48</td><td class="n">2</td></tr><tr><td class="n">49</td><td>cricket 8 teams</td><td>Image</td><td>Events</td><td class="n">91</td><td class="n">27</td></tr><tr><td class="n">50</td><td>Holi</td><td>Image</td><td>Festivals</td><td class="n">45</td><td class="n">2</td></tr><tr><td class="n">51</td><td>Prakash Kumar Singh</td><td>Image</td><td>Trader stories</td><td class="n">46</td><td class="n">3</td></tr><tr><td class="n">52</td><td>Mohammed Rais</td><td>Image</td><td>Trader stories</td><td class="n">39</td><td class="n">1</td></tr><tr><td class="n">53</td><td>10 saal</td><td>Image</td><td>Brand</td><td class="n">26</td><td class="n">2</td></tr><tr><td class="n">54</td><td>Ujjaval Dubey</td><td>Image</td><td>Trader stories</td><td class="n">48</td><td class="n">1</td></tr><tr><td class="n">55</td><td>We Turn 10</td><td>Reel · collab</td><td>Brand</td><td class="n">901</td><td class="n">130</td></tr><tr><td class="n">56</td><td>High Stakes rewards</td><td>Image</td><td>Product updates</td><td class="n">40</td><td class="n">4</td></tr><tr><td class="n">57</td><td>2026 consistency event</td><td>Image</td><td>Events</td><td class="n">89</td><td class="n">15</td></tr><tr><td class="n">58</td><td>Strategize your way</td><td>Image</td><td>Competitions</td><td class="n">141</td><td class="n">20</td></tr><tr><td class="n">59</td><td>Republic Day</td><td>Image</td><td>Festivals</td><td class="n">64</td><td class="n">1</td></tr><tr><td class="n">60</td><td>Indore conclave speakers</td><td>Carousel</td><td>Events</td><td class="n">251</td><td class="n">18</td></tr><tr><td class="n">61</td><td>Indore time running out</td><td>Image</td><td>Events</td><td class="n">36</td><td class="n">3</td></tr><tr><td class="n">62</td><td>Bootcamp leverage</td><td>Image</td><td>Product updates</td><td class="n">30</td><td class="n">3</td></tr><tr><td class="n">63</td><td>TradeConnect 2.0</td><td>Image</td><td>Events</td><td class="n">144</td><td class="n">6</td></tr><tr><td class="n">64</td><td>$12 High Stakes</td><td>Image</td><td>Offers</td><td class="n">34</td><td class="n">0</td></tr><tr><td class="n">65</td><td>Manash</td><td>Image</td><td>Trader stories</td><td class="n">38</td><td class="n">1</td></tr><tr><td class="n">66</td><td>Hyper Growth</td><td>Image</td><td>Product updates</td><td class="n">32</td><td class="n">1</td></tr><tr><td class="n">67</td><td>Shivam</td><td>Image</td><td>Trader stories</td><td class="n">63</td><td class="n">0</td></tr><tr><td class="n">68</td><td>Shekhar</td><td>Image</td><td>Trader stories</td><td class="n">56</td><td class="n">0</td></tr><tr><td class="n">69</td><td>Cyber Monday</td><td>Image</td><td>Offers</td><td class="n">15</td><td class="n">3</td></tr><tr><td class="n">70</td><td>Black Friday</td><td>Image</td><td>Offers</td><td class="n">15</td><td class="n">0</td></tr><tr><td class="n">71</td><td>Piyush C.</td><td>Image</td><td>Trader stories</td><td class="n">34</td><td class="n">3</td></tr><tr><td class="n">72</td><td>Bootcamp account</td><td>Image</td><td>Product updates</td><td class="n">14</td><td class="n">0</td></tr><tr><td class="n">73</td><td>Sahil D.</td><td>Image</td><td>Trader stories</td><td class="n">46</td><td class="n">4</td></tr><tr><td class="n">74</td><td>Balu V.</td><td>Image</td><td>Trader stories</td><td class="n">26</td><td class="n">1</td></tr><tr><td class="n">75</td><td>payouts since 2016 Hindi</td><td>Image</td><td>Brand</td><td class="n">19</td><td class="n">0</td></tr><tr><td class="n">76</td><td>Diwali</td><td>Image</td><td>Festivals</td><td class="n">22</td><td class="n">2</td></tr><tr><td class="n">77</td><td>Diwali reel Hindi</td><td>Reel</td><td>Festivals</td><td class="n">18</td><td class="n">0</td></tr><tr><td class="n">78</td><td>unlimited time</td><td>Image</td><td>Product updates</td><td class="n">12</td><td class="n">0</td></tr><tr><td class="n">79</td><td>support email Hindi</td><td>Image</td><td>Support</td><td class="n">9</td><td class="n">1</td></tr><tr><td class="n">80</td><td>growth plan</td><td>Image</td><td>Product updates</td><td class="n">10</td><td class="n">1</td></tr><tr><td class="n">81</td><td>cTrader</td><td>Image</td><td>Product updates</td><td class="n">14</td><td class="n">1</td></tr><tr><td class="n">82</td><td>Ismail</td><td>Image</td><td>Trader stories</td><td class="n">19</td><td class="n">5</td></tr><tr><td class="n">83</td><td>Dheeraj R.</td><td>Image</td><td>Trader stories</td><td class="n">22</td><td class="n">1</td></tr><tr><td class="n">84</td><td>Alexander T.</td><td>Image</td><td>Trader stories</td><td class="n">22</td><td class="n">1</td></tr><tr><td class="n">85</td><td>Meet Sameer</td><td>Reel · collab</td><td>Brand</td><td class="n">217</td><td class="n">24</td></tr></tbody></table></div>
+        </details>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 05 WHO I AM ============ -->
+  <section id="me">
+    <div class="sec-head">
+      <span class="num">05 · WHO I AM<span class="tagreq">[✓] proven track record</span></span>
+      <h2>About me</h2>
+      <p>I learn quickly and I finish what I start.</p>
+    </div>
+
+    <div class="sub" style="margin-top:0"><span class="k">Content strategist (contract) · The Shades of Trades · Sep–Oct 2026</span><h3>Results for a 517K-follower trading education account</h3></div>
+    <div class="tiles">
+      <div class="tile"><div class="k">Account followers</div><div class="v">517K</div><div class="d">The Shades of Trades · Apoorva Sharma</div></div>
+      <div class="tile"><div class="k">Views generated</div><div class="v">500K</div><div class="d">across 27 reels</div></div>
+      <div class="tile"><div class="k">Best reel</div><div class="v">60K</div><div class="d">views</div></div>
+      <div class="tile"><div class="k">Average views per reel</div><div class="v ok">18K</div><div class="d">up from about 10K (+80%)</div></div>
+    </div>
+
+    <div class="checks" style="margin-top:22px">
+      <div class="check"><span class="bx">✓</span><div><b>I pitch with work, not a CV</b><span class="dt">In August 2026 I audited Apoorva Sharma's last 108 posts on my own initiative. In September I started as her content strategist.</span></div></div>
+      <div class="check"><span class="bx">✓</span><div><b>I build systems</b><span class="dt">A daily research routine, a Kanban board and a themes log in Google Sheets, so nothing is missed or repeated.</span></div></div>
+      <div class="check"><span class="bx">✓</span><div><b>I can make an idea stick</b><span class="dt">I made Crowd Positioning Theory, Apoorva's price-action framework, a regular part of her Reels and Stories.</span></div></div>
+      <div class="check"><span class="bx">✓</span><div><b>I learn fast</b><span class="dt">Video editing, design and AI workflows are all self-taught, because my work needed them.</span></div></div>
+      <div class="check" id="tools" style="scroll-margin-top:90px"><span class="bx">✓</span><div><b>I build my own tools</b><span class="dt">A Discord bot that pings traders 10 minutes before every high-impact news event, my own trading journal apps, and AI workflows for research, design and motion.</span></div></div>
+      <div class="check"><span class="bx">✓</span><div><b>Languages and education</b><span class="dt">English (IELTS 8.5), Hindi and Telugu. B.Tech in AI and ML, CGPA 8.43 (2022–2026).</span></div></div>
+    </div>
+    <div class="kicker">
+      <p>I love the prop industry, and I want to build my career in its marketing. I want to learn as much as I can from the The5ers team, and I am happy to take on whatever the role needs.</p>
+    </div>
+  </section>
+
+  <!-- ============ 06 THE ROLE ============ -->
+  <section id="help">
+    <div class="sec-head">
+      <span class="num">06 · THE ROLE<span class="tagreq">[✓] loads of experience</span></span>
+      <h2>How I can help</h2>
+      <p>The role is still being defined, so here is what I can take on from day one, with the proof for each.</p>
+    </div>
+    <div class="tblwrap d-only">
+      <table>
+        <thead><tr><th style="width:36%">Area</th><th>What I bring</th></tr></thead>
+        <tbody>
+          <tr><td>Community marketing</td><td>8+ hours a day in The5ers India. I know what traders ask, worry about and respond to.</td></tr>
+          <tr><td>Social media</td><td>A 108-post Instagram audit, and an 80% lift in average views for a 517K-follower account.</td></tr>
+          <tr><td>Hindi, Telugu and English</td><td>Native Hindi and Telugu, fluent English. I write in English and Hinglish.</td></tr>
+          <tr><td>Creator and influencer partnerships</td><td>Worked with a 517K-follower trading creator and a The5ers host. Creator collabs bring 89% of The5ers India's Reel plays (section 04).</td></tr>
+          <tr><td>Events and campaigns</td><td>Event posts get about 5× the account's median likes (section 04). I have spoken at a The5ers event myself.</td></tr>
+          <tr><td>Research and reporting</td><td>A 108-post content audit, and a study of all 90 posts on @the5ersindia (section 04).</td></tr>
+                    <tr><td>Design</td><td>Canva for posts, banners and graphics.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="kicker">
+      <p>What I would work on first</p>
+      <ol>
+        <li><b>A creator programme:</b> a shortlist of Indian trading creators, outreach, a code per creator and one tracking sheet.</li>
+        <li><b>An event plan:</b> before, during and after posts for every tournament and conclave.</li>
+        <li><b>The bio and offers:</b> the current offer first, a link to the Telegram community, and one code across channels.</li>
+        <li><b>Telegram and Instagram together:</b> each one pointing traders to the other.</li>
+      </ol>
+      <p class="close">I am available to start immediately. Thank you for reading.</p>
+    </div>
+  </section>
+
+  <!-- ============ 07 RESUME ============ -->
+  <section id="resume">
+    <div class="sec-head">
+      <span class="num">07</span>
+      <h2>Resume</h2>
+    </div>
+    <div class="resume-actions">
+      <a class="btn" href="assets/Samyukth-Bitra-Resume.pdf?v=1" download="Samyukth-Bitra-Resume.pdf">Download PDF ↓</a>
+      <a class="btn" href="assets/Samyukth-Bitra-Resume.pdf?v=1" target="_blank" rel="noopener">Open in a new tab ↗</a>
+    </div>
+    <!-- ponytail: page images, not an <object> embed; PDF embeds render blank or page-1-only in many browsers. Re-render with: pdftoppm -r 144 -png Samyukth-Bitra-Resume.pdf resume, update the <img> list to the page count, then bump ?v= on every resume link (GitHub Pages caches files for 10 minutes) -->
+    <p class="s-only skimnote">The resume pages are shown in <button type="button" class="linkbtn" data-set="detail">Detail mode</button>, or open the PDF above.</p>
+    <div class="resume d-only">
+      <img src="assets/resume-1.png?v=1" alt="Resume" loading="lazy">
+    </div>
+  </section>
+
+  <footer>
+    <span class="d-only">Instagram research read on 19 October 2026 from the public profile and Reels tab of <a href="https://www.instagram.com/the5ersindia/">instagram.com/the5ersindia</a>: likes and comments as shown on each post, plays as shown on the Reels tab. Saves, shares, reach, link taps and demographics are not visible from outside and are not claimed here. Nothing here is investment advice.<br><br></span>Samyukth Bitra · <a href="mailto:samyukthbitra@gmail.com">samyukthbitra@gmail.com</a>
+  </footer>
+</div>
+
+<dialog class="zoom" id="zoom" aria-label="Image, enlarged">
+  <button class="zoom-close" type="button" aria-label="Close">✕</button>
+  <div class="zoom-inner"><img alt="Content audit for @theshadesoftrades, full size"></div>
+</dialog>
+
+<script>
+(function(){
+  "use strict";
+  /* ---------- reading modes: skim / detail, remembered per viewer, reading time from the words on screen ---------- */
+  (function(){
+    var root = document.documentElement;
+    var parts = [document.querySelector('.herowrap'), document.querySelector('.herowrap ~ .wrap')];
+    function minutes(){ var w = 0; parts.forEach(function(p){ if (p) w += (p.innerText.match(/\S+/g) || []).length; }); return Math.max(1, Math.round(w / 230)); }
+    var t = {}, cur = root.getAttribute('data-mode');
+    ['skim','detail'].forEach(function(m){ root.setAttribute('data-mode', m); t[m] = minutes(); });
+    root.setAttribute('data-mode', cur);
+    document.querySelectorAll('[data-time]').forEach(function(el){ el.textContent = '~' + t[el.getAttribute('data-time')] + ' min'; });
+    document.querySelectorAll('.mb-time').forEach(function(el){ el.textContent = ' in about ' + t.skim + ' minutes'; });
+    function sync(m){ document.querySelectorAll('[data-set]').forEach(function(b){ if (b.hasAttribute('aria-pressed')) b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === m)); }); }
+    sync(cur);
+    document.querySelectorAll('[data-set]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var m = b.getAttribute('data-set'); if (root.getAttribute('data-mode') === m) return;
+        // keep the reader's place: remember the section in view and its offset, restore after the switch
+        var secs = Array.prototype.slice.call(document.querySelectorAll('section, .herowrap')), anchor = secs[0], off = 0;
+        secs.forEach(function(s){ var r = s.getBoundingClientRect(); if (r.top <= 120) { anchor = s; off = r.top; } });
+        root.setAttribute('data-mode', m); sync(m);
+        try { localStorage.setItem('t5-mode', m); } catch(e) {}
+        var y = anchor.getBoundingClientRect().top + window.scrollY - off;
+        root.style.scrollBehavior = 'auto'; window.scrollTo(0, Math.max(0, y)); root.style.scrollBehavior = '';
+        window.dispatchEvent(new Event('scroll'));
+      });
+    });
+  })();
+
+  /* ---------- requirements window: boxes start ticked in the HTML (safe without JS),
+     then untick and tick again one by one the first time the window is on screen ---------- */
+  (function(){
+    var win = document.getElementById('reqs'); if (!win || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var boxes = win.querySelectorAll('.box'), count = document.getElementById('reqcount'), n = boxes.length;
+    boxes.forEach(function(b){ b.textContent = '[ ]'; });
+    count.textContent = '0/' + n + ' checked';
+    var io = new IntersectionObserver(function(es){
+      if (!es[0].isIntersecting) return; io.disconnect();
+      boxes.forEach(function(b, i){
+        setTimeout(function(){
+          b.textContent = '[✓]'; b.classList.add('on');
+          count.textContent = (i + 1) + '/' + n + ' checked' + (i + 1 === n ? ' · all requirements met' : '');
+        }, 350 + i * 260);
+      });
+    }, { threshold:0.35 });
+    io.observe(win);
+  })();
+
+  /* ---------- suggested changes: expand / collapse all ---------- */
+  (function(){
+    var btn = document.getElementById('expandAll'); if (!btn) return;
+    var items = document.querySelectorAll('#research > .acc details.item');
+    btn.addEventListener('click', function(){
+      var open = Array.prototype.some.call(items, function(d){ return !d.open; });
+      items.forEach(function(d){ d.open = open; });
+      btn.textContent = open ? 'Collapse all' : 'Expand all';
+    });
+  })();
+
+  /* ---------- design zoom: click opens a <dialog>; click the image for full size; Esc, ✕ or backdrop closes ---------- */
+  (function(){
+    var dlg = document.getElementById('zoom');
+    if (!dlg || !dlg.showModal) return;
+    var inner = dlg.querySelector('.zoom-inner'), big = inner.querySelector('img');
+    document.querySelectorAll('.slot.zoomable').forEach(function(s){
+      s.addEventListener('click', function(){
+        var img = s.querySelector('img'); if (!img) return;
+        big.src = img.src; inner.classList.remove('full'); dlg.showModal();
+      });
+    });
+    big.addEventListener('click', function(e){ e.stopPropagation(); inner.classList.toggle('full'); });
+    inner.addEventListener('click', function(){ dlg.close(); });
+    dlg.querySelector('.zoom-close').addEventListener('click', function(){ dlg.close(); });
+  })();
+
+  var root = document.documentElement;
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+
+  /* ---------- media slots: placeholder text stays until the file exists in assets/ ---------- */
+  document.querySelectorAll('[data-media]').forEach(function(s){
+    var src = s.dataset.media, v = /\.(mp4|mov|webm)$/i.test(src);
+    var el = document.createElement(v ? 'video' : 'img');
+    el.onerror = function(){ el.remove(); };
+    if (v) {
+      el.controls = true; el.playsInline = true; el.preload = 'metadata';
+      if (s.dataset.poster) el.poster = s.dataset.poster;
+      var source = document.createElement('source');
+      source.src = src; source.type = 'video/mp4';
+      source.onerror = function(){ el.remove(); };
+      el.appendChild(source);
+    } else { el.src = src; el.alt = ''; el.loading = 'lazy'; }
+    s.appendChild(el);
+  });
+
+  /* ---------- bars grow in when they scroll into view ---------- */
+  var fills = document.querySelectorAll('.bfill');
+  var reduceBars = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  fills.forEach(function(f){ f.style.width = reduceBars ? f.dataset.w + '%' : '0%'; });
+  if (!reduceBars) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (!e.isIntersecting) return;
+        e.target.querySelectorAll('.bfill').forEach(function(f, i){
+          setTimeout(function(){ f.style.width = f.dataset.w + '%'; }, 40 + i * 30);
+        });
+        io.unobserve(e.target);
+      });
+    }, { threshold:0.15 });
+    document.querySelectorAll('.bars').forEach(function(b){ io.observe(b); });
+  }
+
+  /* ================= Scanner — vanilla WebGL2 port of React Bits <Scanner /> =================
+     Verbatim from the Shades of Trades audit; colours are The5ers navy, purple and lime, brightness down. */
+  (function(){
+    var container = document.getElementById('scanner');
+    if (!container) return;
+
+    var OPTS = {
+      color1:'#15133a', color2:'#5b3fc4', color3:'#ddfd6c',
+      speed:0.4, sweepSpeed:0.16, sweepWidth:2.2, sweepFalloff:4.5,
+      scale:2.1, frequency:1.7, ripple:0.28, bandDensity:8, lineSharpness:4.2, glow:0.22,
+      scanDirection:'diagonal', colorSpread:0.14, brightness:0.95, contrast:1.1,
+      softness:1.6, vignette:0.30, scanline:false, grain:true, grainIntensity:0.03,
+      opacity:1.0, mouseInteraction:true, mouseRadius:0.55, mouseStrength:0.5
+    };
+
+    function hexToRgb(hex){
+      var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      if (!m) return [1,1,1];
+      return [parseInt(m[1],16)/255, parseInt(m[2],16)/255, parseInt(m[3],16)/255];
+    }
+    function dirToFloat(d){ return d === 'horizontal' ? 1.0 : d === 'diagonal' ? 2.0 : 0.0; }
+
+    var VERT = '#version 300 es\nin vec2 position;\nvoid main(){ gl_Position = vec4(position, 0.0, 1.0); }\n';
+
+    var FRAG = [
+'#version 300 es',
+'precision highp float;',
+'uniform vec2 iResolution; uniform float iTime;',
+'uniform float uSpeed, uSweepSpeed, uSweepWidth, uSweepFalloff, uScale, uFrequency, uRipple;',
+'uniform float uBandDensity, uLineSharpness, uGlow, uColorSpread, uBrightness, uContrast;',
+'uniform float uSoftness, uVignette, uOpacity, uScanline, uGrain, uGrainIntensity, uDirection;',
+'uniform float uScroll;',
+'uniform vec2 uMouse;',
+'uniform float uMouseEnabled, uMouseRadius, uMouseStrength, uMouseActive;',
+'uniform vec3 uColor1, uColor2, uColor3;',
+'out vec4 fragColor;',
+'const float TAU = 6.2831853;',
+'float signalField(vec2 p, float t){',
+'  float w = sin(p.x * 1.3 + t * 0.7);',
+'  w += sin(p.y * 1.7 - t * 0.52) * 0.8;',
+'  w += sin((p.x + p.y) * 0.9 + t * 0.91) * 0.6;',
+'  w += sin((p.x - p.y) * 1.53 - t * 0.63) * 0.42;',
+'  return w * 0.35;',
+'}',
+'vec3 palette(float f){',
+'  f = clamp(f, 0.0, 1.0);',
+'  f = pow(f, uContrast);',
+'  vec3 c = mix(uColor1, uColor2, smoothstep(0.08, 0.6, f));',
+'  return mix(c, uColor3, smoothstep(0.68, 1.0, f));',
+'}',
+'float scanBand(float x, float aa, float sharp){',
+'  float v = mix(0.5, 0.5 + 0.5 * cos(x * TAU), aa);',
+'  return pow(v, sharp);',
+'}',
+'void main(){',
+'  float aspect = iResolution.x / iResolution.y;',
+'  vec2 uv0 = (gl_FragCoord.xy * 2.0 - iResolution.xy) / iResolution.y;',
+'  vec2 p = (uv0 + vec2(0.0, uScroll)) / max(uScale, 0.001);',
+'  float t = iTime * uSpeed;',
+'  float mouseBoost = 0.0;',
+'  if (uMouseEnabled > 0.5) {',
+'    vec2 mUv = vec2((uMouse.x * 2.0 - 1.0) * aspect, uMouse.y * 2.0 - 1.0);',
+'    vec2 md = uv0 - mUv;',
+'    float r = max(uMouseRadius, 0.001);',
+'    mouseBoost = exp(-dot(md, md) / (r * r)) * uMouseStrength * uMouseActive;',
+'  }',
+'  float axis;',
+'  if (uDirection < 0.5) axis = p.y;',
+'  else if (uDirection < 1.5) axis = p.x;',
+'  else axis = (p.x + p.y) * 0.70710678;',
+'  float sig = signalField(p * uFrequency, t);',
+'  float coord = axis + sig * uRipple;',
+'  float phase = coord / max(uSweepWidth, 0.05) - t * uSweepSpeed;',
+'  float sweep = pow(0.5 + 0.5 * cos(phase * TAU), max(uSweepFalloff, 0.1));',
+'  float lc = coord * uBandDensity;',
+'  float aa = 1.0 / (1.0 + uSoftness * fwidth(lc) * 3.0);',
+'  aa = clamp(aa * (1.0 + mouseBoost * 0.6), 0.0, 1.0);',
+'  float bodyBase = clamp(0.5 + 0.5 * sig, 0.0, 1.0);',
+'  float body = bodyBase * bodyBase * uGlow * sweep;',
+'  float sharp = max(uLineSharpness, 0.1);',
+'  float split = uColorSpread * 0.16;',
+'  float fr = clamp(scanBand(lc + split, aa, sharp) * sweep + body, 0.0, 1.0);',
+'  float fg = clamp(scanBand(lc, aa, sharp) * sweep + body, 0.0, 1.0);',
+'  float fb = clamp(scanBand(lc - split, aa, sharp) * sweep + body, 0.0, 1.0);',
+'  vec3 col = vec3(palette(fr).r, palette(fg).g, palette(fb).b);',
+'  float inten = (fr + fg + fb) * 0.3333333 * uBrightness;',
+'  inten *= 1.0 + mouseBoost * 0.9;',
+'  if (uScanline > 0.5) { inten *= 1.0 - 0.18 * (0.5 + 0.5 * cos(gl_FragCoord.y * 1.7)); }',
+'  if (uGrain > 0.5) {',
+'    float g = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233)) + iTime) * 43758.5453);',
+'    inten += (g - 0.5) * uGrainIntensity;',
+'  }',
+'  inten *= clamp(1.0 - uVignette * smoothstep(0.55, 1.65, length(uv0)), 0.0, 1.0);',
+'  inten = clamp(inten, 0.0, 1.0);',
+'  float a = clamp(inten * uOpacity, 0.0, 1.0);',
+'  fragColor = vec4(clamp(col, 0.0, 1.0) * a, a);',
+'}'
+].join('\n');
+
+    var canvas = document.createElement('canvas');
+    var gl = canvas.getContext('webgl2', { alpha:true, premultipliedAlpha:true, antialias:false });
+    if (!gl) return;   // no WebGL2 → the dark base alone still reads fine
+    container.appendChild(canvas);
+
+    function compile(type, src){
+      var sh = gl.createShader(type);
+      gl.shaderSource(sh, src); gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+        console.warn('Scanner shader:', gl.getShaderInfoLog(sh)); return null;
+      }
+      return sh;
+    }
+    var vs = compile(gl.VERTEX_SHADER, VERT), fs = compile(gl.FRAGMENT_SHADER, FRAG);
+    if (!vs || !fs) { container.removeChild(canvas); return; }
+    var prog = gl.createProgram();
+    gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { container.removeChild(canvas); return; }
+    gl.useProgram(prog);
+
+    var vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(prog, 'position');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+    var U = {};
+    ['iResolution','iTime','uSpeed','uSweepSpeed','uSweepWidth','uSweepFalloff','uScale','uFrequency',
+     'uRipple','uBandDensity','uLineSharpness','uGlow','uColorSpread','uBrightness','uContrast',
+     'uSoftness','uVignette','uOpacity','uScanline','uGrain','uGrainIntensity','uDirection','uScroll',
+     'uMouse','uMouseEnabled','uMouseRadius','uMouseStrength','uMouseActive',
+     'uColor1','uColor2','uColor3'].forEach(function(n){ U[n] = gl.getUniformLocation(prog, n); });
+
+    gl.uniform1f(U.uSpeed, OPTS.speed);
+    gl.uniform1f(U.uSweepSpeed, OPTS.sweepSpeed);
+    gl.uniform1f(U.uSweepWidth, OPTS.sweepWidth);
+    gl.uniform1f(U.uSweepFalloff, OPTS.sweepFalloff);
+    gl.uniform1f(U.uScale, OPTS.scale);
+    gl.uniform1f(U.uFrequency, OPTS.frequency);
+    gl.uniform1f(U.uRipple, OPTS.ripple);
+    gl.uniform1f(U.uBandDensity, OPTS.bandDensity);
+    gl.uniform1f(U.uLineSharpness, OPTS.lineSharpness);
+    gl.uniform1f(U.uGlow, OPTS.glow);
+    gl.uniform1f(U.uColorSpread, OPTS.colorSpread);
+    gl.uniform1f(U.uBrightness, OPTS.brightness);
+    gl.uniform1f(U.uContrast, OPTS.contrast);
+    gl.uniform1f(U.uSoftness, OPTS.softness);
+    gl.uniform1f(U.uVignette, OPTS.vignette);
+    gl.uniform1f(U.uOpacity, OPTS.opacity);
+    gl.uniform1f(U.uScanline, OPTS.scanline ? 1 : 0);
+    gl.uniform1f(U.uGrain, OPTS.grain ? 1 : 0);
+    gl.uniform1f(U.uGrainIntensity, OPTS.grainIntensity);
+    gl.uniform1f(U.uDirection, dirToFloat(OPTS.scanDirection));
+    gl.uniform1f(U.uMouseEnabled, OPTS.mouseInteraction ? 1 : 0);
+    gl.uniform1f(U.uMouseRadius, OPTS.mouseRadius);
+    gl.uniform1f(U.uMouseStrength, OPTS.mouseStrength);
+    gl.uniform3fv(U.uColor1, hexToRgb(OPTS.color1));
+    gl.uniform3fv(U.uColor2, hexToRgb(OPTS.color2));
+    gl.uniform3fv(U.uColor3, hexToRgb(OPTS.color3));
+
+    gl.clearColor(0,0,0,0);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);   // premultiplied alpha
+
+    function draw(){
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    function setSize(){
+      var r = container.getBoundingClientRect();
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width  = Math.max(1, Math.floor(r.width  * dpr));
+      canvas.height = Math.max(1, Math.floor(r.height * dpr));
+      gl.uniform2f(U.iResolution, canvas.width, canvas.height);
+      draw();
+    }
+    new ResizeObserver(setSize).observe(container); setSize();
+
+    /* pointer focus */
+    var cur = [0.5, 0.5], tgt = [0.5, 0.5], act = 0, tgtAct = 0;
+    window.addEventListener('mousemove', function(e){
+      tgt = [e.clientX / window.innerWidth, 1 - e.clientY / window.innerHeight];
+      tgtAct = 1;
+    }, { passive:true });
+    document.addEventListener('mouseleave', function(){ tgtAct = 0; });
+
+    /* the field pans with the page — one fixed canvas, no tiling, no seams */
+    var scrollU = 0, scrollTarget = 0;
+    function readScroll(){ scrollTarget = -(window.scrollY / Math.max(window.innerHeight, 1)) * 2.0; }
+    readScroll();
+    scrollU = scrollTarget;
+    window.addEventListener('scroll', readScroll, { passive:true });
+    window.addEventListener('resize', readScroll);
+
+    /* reduced motion → one static frame, no loop */
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      gl.uniform1f(U.iTime, 12.0);
+      var paint = function(){ gl.uniform1f(U.uScroll, scrollTarget); draw(); };
+      paint();
+      window.addEventListener('scroll', paint, { passive:true });
+      return;
+    }
+
+    var raf = 0, onScreen = true, pageOn = !document.hidden, t0 = performance.now();
+    function loop(t){
+      gl.uniform1f(U.iTime, (t - t0) * 0.001);
+      cur[0] += 0.05 * (tgt[0] - cur[0]);
+      cur[1] += 0.05 * (tgt[1] - cur[1]);
+      gl.uniform2f(U.uMouse, cur[0], cur[1]);
+      act += 0.05 * (tgtAct - act);
+      gl.uniform1f(U.uMouseActive, act);
+      scrollU += 0.12 * (scrollTarget - scrollU);
+      gl.uniform1f(U.uScroll, scrollU);
+      draw();
+      raf = requestAnimationFrame(loop);
+    }
+    function start(){ if (onScreen && pageOn && !raf) raf = requestAnimationFrame(loop); }
+    function stop(){ if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+    new IntersectionObserver(function(e){ onScreen = e[0].isIntersecting; onScreen ? start() : stop(); },
+      { threshold:0 }).observe(container);
+    document.addEventListener('visibilitychange', function(){
+      pageOn = !document.hidden; pageOn ? start() : stop();
+    });
+    start();
+  })();
+
+  /* ---------- pinned nav: scroll spy + progress ---------- */
+  (function(){
+    var bar   = document.querySelector('.topbar');
+    var links = Array.prototype.slice.call(document.querySelectorAll('.navlinks a'));
+    var prog  = document.getElementById('progress');
+    var targets = links.map(function(a){
+      return { link:a, el:document.querySelector(a.getAttribute('href')) };
+    }).filter(function(t){ return t.el; });
+    if (!targets.length) return;
+
+    var ticking = false;
+    function update(){
+      ticking = false;
+      var y = window.scrollY || 0;
+      bar.classList.toggle('stuck', y > 8);
+      var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      prog.style.width = Math.min(100, (y / max) * 100) + '%';
+      var line = y + bar.offsetHeight + 90, current = targets[0];
+      // page position, not offsetTop: sections sit inside .wrap (position:relative), so offsetTop skips the hero
+      targets.forEach(function(t){ if (t.el.getBoundingClientRect().top + y <= line) current = t; });
+      if (current.link === lastLink) return;
+      lastLink = current.link;
+      links.forEach(function(a){ a.classList.remove('active'); a.removeAttribute('aria-current'); });
+      current.link.classList.add('active');
+      current.link.setAttribute('aria-current','true');
+      // on phones the links scroll sideways: keep the active one in view
+      if (nav.scrollWidth > nav.clientWidth) {
+        nav.scrollTo({ left: current.link.offsetLeft - (nav.clientWidth - current.link.offsetWidth) / 2, behavior:'smooth' });
+      }
+    }
+    var lastLink = null, nav = document.querySelector('.navlinks');
+    function onScroll(){ if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    window.addEventListener('scroll', onScroll, { passive:true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
+})();
+</script>
+</body>
+</html>
